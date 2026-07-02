@@ -1,0 +1,46 @@
+# Copyright (c) 2026 Tencent Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-cubesandbox"
+version = "0.1.0"
+description = "MCP Server for CubeSandbox — lets Claude Code and other MCP clients manage sandboxes"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]>=1.8.0,<2",
+    "cubesandbox>=0.3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/TencentCloud/CubeSandbox"
+
+[project.scripts]
+mcp-cubesandbox = "mcp_cubesandbox.server:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["mcp_cubesandbox*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+ignore = ["E501"]
