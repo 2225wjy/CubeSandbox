@@ -25,7 +25,8 @@
   "actions": {
     "resume": "Resume",
     "pause": "Pause",
-    "kill": "Kill"
+    "kill": "Kill",
+    "terminal": "Open Terminal"
   },
   "errors": {
     "unknown": "Unknown error",

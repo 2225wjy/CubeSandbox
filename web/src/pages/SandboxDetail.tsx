@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { sandboxApi } from '@/api/client';
 import { Card, CardTitle, CardDescription, CardHeader } from '@/components/ui/card';
@@ -11,10 +11,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, Pause, Play, Trash2, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Pause, Play, Trash2, RefreshCw, Terminal as TerminalIcon } from 'lucide-react';
 import { cn, formatBytes, formatRelative } from '@/lib/utils';
 import { formatSandboxActionError } from '@/lib/sandboxActionError';
 import { SandboxActionErrorBanner } from '@/components/SandboxActionErrorBanner';
+import { TerminalPanel } from '@/components/terminal/TerminalPanel';
 
 // ── Log level colors ────────────────────────────────────────────────────────
 const LEVEL_CLASS: Record<string, string> = {
@@ -36,6 +37,12 @@ export default function SandboxDetailPage() {
   const nav = useNavigate();
   const qc = useQueryClient();
   const { t } = useTranslation('sandboxDetail');
+  const location = useLocation();
+
+  // ── Terminal state ────────────────────────────────────────────────────────
+  const [terminalOpen, setTerminalOpen] = useState(
+    () => location.hash === '#terminal',
+  );
 
   // ── Sandbox detail ──────────────────────────────────────────────────────
   const { data, isLoading } = useQuery({
@@ -248,6 +255,36 @@ export default function SandboxDetailPage() {
           )}
         </pre>
       </Card>
+
+      {/* ── Terminal ── */}
+      {state === 'running' && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>{t('terminal')}</CardTitle>
+                <CardDescription>{t('terminalDesc')}</CardDescription>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setTerminalOpen((v) => !v)}
+              >
+                <TerminalIcon size={14} className="mr-1.5" />
+                {terminalOpen ? t('terminal.hide') : t('terminal.open')}
+              </Button>
+            </div>
+          </CardHeader>
+          {terminalOpen && (
+            <div className="px-6 pb-6">
+              <TerminalPanel
+                sandboxID={sandboxID}
+                onClose={() => setTerminalOpen(false)}
+              />
+            </div>
+          )}
+        </Card>
+      )}
     </div>
   );
 }

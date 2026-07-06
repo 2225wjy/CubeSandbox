@@ -18,7 +18,9 @@ use tower_http::{
 };
 
 use crate::{
-    handlers::{agenthub, auth, cluster, config, health, sandboxes, snapshots, store, templates},
+    handlers::{
+        agenthub, auth, cluster, config, health, sandboxes, snapshots, store, templates, terminal,
+    },
     middleware::{auth::unified_auth, rate_limit::rate_limit},
     state::AppState,
 };
@@ -59,9 +61,16 @@ pub fn build_router(state: AppState) -> Router {
         SNAPSHOT_LONG_ROUTE_TIMEOUT,
     );
 
+    // ── WebSocket routes ──────────────────────────────────────────────────
+    // Terminal WS connections are long-lived and must NOT be subject to the
+    // 30-second HTTP timeout or response compression.  We apply only CORS
+    // (for the browser preflight) and skip timeout / compression layers.
+    let ws_router = build_ws_router(&state).layer(CorsLayer::permissive());
+
     Router::new()
         .merge(standard_router)
         .merge(snapshot_long_router)
+        .merge(ws_router)
         .with_state(state)
 }
 
@@ -323,6 +332,22 @@ fn build_agenthub_routes(state: &AppState, auth_configured: bool) -> Router<AppS
         );
 
     with_auth(routes, state, auth_configured)
+}
+
+/// WebSocket routes — no timeout, no compression.  Mounted at both `/`
+/// (e2b-compatible) and `/cubeapi/v1` (WebUI) so the browser can connect to
+/// either path.  Auth is handled inside the handler via the `?token=` query
+/// parameter because browsers cannot set custom headers on a WS handshake.
+fn build_ws_router(_state: &AppState) -> Router<AppState> {
+    Router::new()
+        .route(
+            "/sandboxes/:sandboxID/terminal",
+            get(terminal::terminal_ws),
+        )
+        .route(
+            "/cubeapi/v1/sandboxes/:sandboxID/terminal",
+            get(terminal::terminal_ws),
+        )
 }
 
 fn with_auth(

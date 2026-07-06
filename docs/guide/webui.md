@@ -100,7 +100,31 @@ Open **Settings** in the left rail:
 
 The Command Palette's ⌘K input box and the topbar have quick toggles for the same.
 
-## 6. FAQ
+## 6. Terminal Login
+
+On the sandbox detail page, **running** instances show an "Open Terminal" button. Clicking it opens an interactive terminal panel, giving you a shell session directly inside the sandbox.
+
+### Features
+- **Full interactive shell**: Built on xterm.js with ANSI color support, cursor control, window auto-resize, copy/paste, and scrollback
+- **Multiple sessions**: Open multiple terminal tabs/windows for the same sandbox simultaneously
+- **Idle timeout**: Sessions auto-disconnect after 30 minutes of inactivity
+- **Authentication**: Terminal access requires platform authentication; unauthorized users are blocked
+
+### Usage
+1. Navigate to **Sandboxes → Sandbox Detail** (or click the Terminal icon from the sandbox list)
+2. Click "Open Terminal"
+3. The terminal automatically connects to `/bin/bash` inside the sandbox
+4. Fullscreen mode and font size adjustments are available in the toolbar
+
+### Requirements
+- A valid Session Token or API Key
+- The target sandbox must be in `Running` state
+
+### Known Limitations
+- Terminal connects via WebSocket to the envd agent inside the sandbox; latency depends on network conditions
+- Terminal sessions do not auto-reconnect after sandbox pause/resume
+
+## 7. FAQ
 
 **Why a separate Dashboard, not just curl?**
 Most operations (create-from-image, version matrix, node triage) are easier to discover and visualize in a UI. For automation, the Dashboard is just a thin client — every page is a call to `/cubeapi/v1/*`, which is the same E2B-compatible REST API you can hit with `curl` or the E2B SDK.
@@ -117,7 +141,7 @@ Yes — set `WEB_UI_ENABLE=0` (or unset) in `.env`. The cluster keeps running; y
 **Is the Dashboard open source? Can I run my own build?**
 Yes — it lives in `web/` of the repo, built with Vite + React + TypeScript + Tailwind. See [Self-Build Deployment](./self-build-deploy.md) and the [`web/README.md`](https://github.com/TencentCloud/CubeSandbox/blob/master/web/README.md) for details.
 
-## 7. Next steps
+## 8. Next steps
 
 - [Quick Start](./quickstart.md) — if you haven't installed yet, get to a running Dashboard in minutes
 - [Service Management](./service-management.md) — how to start/stop/restart the `cube-sandbox-webui.service` container

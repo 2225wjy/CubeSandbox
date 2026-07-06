@@ -22,10 +22,26 @@
     "state": "State",
     "envd": "envd"
   },
+  "terminal": "Terminal",
+  "terminalDesc": "Interactive shell session via WebSocket.",
+  "terminal.open": "Open Terminal",
+  "terminal.hide": "Hide Terminal",
+  "terminal.fullscreen": "Fullscreen",
+  "terminal.exitFullscreen": "Exit Fullscreen",
+  "terminal.disconnect": "Disconnect",
+  "terminal.reconnect": "Reconnect",
+  "terminal.fontSize": "Font Size",
+  "terminal.selectContainer": "Select Container",
+  "terminal.connecting": "Connecting…",
+  "terminal.disconnected": "Disconnected",
+  "terminal.error": "Connection error: {{message}}",
+  "terminal.idleTimeout": "Session timed out due to inactivity",
+  "terminal.notRunning": "Terminal is only available for running instances",
   "actions": {
     "resume": "Resume",
     "pause": "Pause",
-    "kill": "Kill"
+    "kill": "Kill",
+    "terminal": "Open Terminal"
   },
   "errors": {
     "unknown": "Unknown error",

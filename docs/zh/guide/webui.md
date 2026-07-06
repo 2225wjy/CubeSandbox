@@ -100,7 +100,31 @@ Dashboard 对键盘很友好。最常用的三个：
 
 顶栏右上角和 ⌘K 输入框里也有同样的快捷开关。
 
-## 6. 常见问题
+## 6. 终端登录
+
+在沙箱详情页，**运行中**的实例会显示一个「打开终端」按钮。点击后展开一个交互式终端面板，直接获得沙箱内部的 shell 会话。
+
+### 功能
+- **完整的交互式 shell**：基于 xterm.js，支持 ANSI 颜色、光标控制、窗口自适应、复制粘贴和滚动回溯
+- **多终端会话**：同一沙箱可以同时打开多个终端窗口，互不干扰
+- **空闲超时**：30 分钟无操作自动断开，避免资源浪费
+- **鉴权保护**：终端登录需通过平台认证，未授权用户无法访问
+
+### 使用方式
+1. 进入 **沙箱 → 沙箱详情** 页面（或从沙箱列表点击终端图标跳转）
+2. 点击「打开终端」按钮
+3. 终端会自动连接到沙箱的 `/bin/bash` shell
+4. 支持全屏模式、字号调整等基本设置
+
+### 权限要求
+- 需要有效的 Session Token 或 API Key
+- 目标沙箱必须处于 `Running` 状态
+
+### 已知限制
+- 终端通过 WebSocket 连接到沙箱内的 envd agent，延迟取决于网络条件
+- 终端会话不会在沙箱暂停/恢复后自动重连
+
+## 7. 常见问题
 
 **为什么还要单独做个 Dashboard，不能直接用 curl 吗？**
 绝大多数操作（从镜像创建模板、看版本矩阵、排查节点）在 UI 里更容易发现和理解。Dashboard 本质上只是 CubeAPI 的一个轻量客户端——每个页面背后都是一次 `/cubeapi/v1/*` 请求，这跟 E2B SDK、`curl` 调的是同一个 E2B 兼容 REST API。
@@ -117,7 +141,7 @@ Dashboard 对键盘很友好。最常用的三个：
 **Dashboard 是开源的吗？我能自己构建吗？**
 可以——它在仓库的 `web/` 目录里，用 Vite + React + TypeScript + Tailwind 构建。详见 [本地构建部署](./self-build-deploy.md) 和 [`web/README.md`](https://github.com/TencentCloud/CubeSandbox/blob/master/web/README.md)。
 
-## 7. 下一步
+## 8. 下一步
 
 - [快速开始](./quickstart.md) — 如果你还没安装，几分钟到能跑的 Dashboard
 - [服务管理与日志](./service-management.md) — 如何启停 / 重启 `cube-sandbox-webui.service` 容器

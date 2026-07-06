@@ -22,10 +22,26 @@
     "state": "状态",
     "envd": "envd"
   },
+  "terminal": "终端",
+  "terminalDesc": "通过 WebSocket 的交互式 shell 会话。",
+  "terminal.open": "打开终端",
+  "terminal.hide": "收起终端",
+  "terminal.fullscreen": "全屏",
+  "terminal.exitFullscreen": "退出全屏",
+  "terminal.disconnect": "断开连接",
+  "terminal.reconnect": "重新连接",
+  "terminal.fontSize": "字号",
+  "terminal.selectContainer": "选择容器",
+  "terminal.connecting": "连接中…",
+  "terminal.disconnected": "已断开",
+  "terminal.error": "连接错误：{{message}}",
+  "terminal.idleTimeout": "会话因空闲超时已断开",
+  "terminal.notRunning": "终端仅对运行中的实例可用",
   "actions": {
     "resume": "恢复",
     "pause": "暂停",
-    "kill": "终止"
+    "kill": "终止",
+    "terminal": "打开终端"
   },
   "errors": {
     "unknown": "未知错误",

@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Pause, Play, Trash2, Search, Plus } from 'lucide-react';
+import { Pause, Play, Trash2, Search, Plus, Terminal } from 'lucide-react';
 import { formatBytes, formatRelative, short } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { formatSandboxActionError } from '@/lib/sandboxActionError';
@@ -213,6 +213,13 @@ function Row({
       <div className="text-xs text-muted-foreground/80 text-num">{sb.clientID || '—'}</div>
       <div className="text-xs text-muted-foreground">{formatRelative(sb.startedAt)}</div>
       <div className="flex justify-end gap-1">
+        {state === 'running' && (
+          <Link to={`/sandboxes/${sb.sandboxID}#terminal`}>
+            <Button size="icon" variant="ghost" title={t('actions.terminal')}>
+              <Terminal size={14} />
+            </Button>
+          </Link>
+        )}
         {state === 'paused' ? (
           <Button size="icon" variant="ghost" title={t('actions.resume')} onClick={onResume} disabled={busy}>
             <Play size={14} />
